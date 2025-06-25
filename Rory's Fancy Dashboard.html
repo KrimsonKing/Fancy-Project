@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fancy Advertiser Dashboard MVP - Final Flow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2D3748 0%, #4A5568 100%);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+        }
+        
+        .executive-summary, .core-assumptions, .product-vision {
+            grid-column: 1 / -1; 
+        }
+
+        .core-assumptions ul {
+            list-style: none;
+            padding-left: 0;
+            columns: 2;
+            -webkit-columns: 2;
+            -moz-columns: 2;
+            column-gap: 40px;
+        }
+        
+        .core-assumptions li {
+            break-inside: avoid-column;
+            padding-bottom: 10px;
+            position: relative;
+            padding-left: 1.5em;
+        }
+        
+        .core-assumptions li::before {
+            content: "▪";
+            color: #667eea;
+            font-weight: bold;
+            display: inline-block;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .left-column, .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .section h2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            color: #2D3748;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .icon {
+            font-size: 1.5rem;
+        }
+        
+        .executive-summary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-left: none;
+        }
+        
+        .executive-summary h2 {
+            color: white;
+        }
+        
+        .dashboard-mockup {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            width: 100%;
+        }
+        
+        .mockup-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .mockup-header h3 {
+            color: #2D3748;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .metric-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px solid;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .metric-card.red {
+            border-color: #ef4444;
+            background: linear-gradient(135deg, #fef2f2, #ffffff);
+        }
+        
+        .metric-card.yellow {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #fffbeb, #ffffff);
+        }
+        
+        .metric-card.green {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #f0fdf4, #ffffff);
+        }
+        
+        .metric-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #374151;
+            margin-bottom: 5px;
+        }
+        
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .metric-card.red .metric-value {
+            color: #dc2626;
+        }
+        
+        .metric-card.yellow .metric-value {
+            color: #d97706;
+        }
+        
+        .metric-card.green .metric-value {
+            color: #059669;
+        }
+        
+        .recommendation {
+            font-size: 0.85rem;
+            color: #4b5563;
+            margin-bottom: 8px;
+        }
+        
+        .action-link {
+            color: #3b82f6;
+            text-decoration: underline;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        
+        .action-link:hover {
+            color: #1d4ed8;
+        }
+        
+        .capabilities {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .capability {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .capability-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .capability-content h4 {
+            color: #2D3748;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .capability-content p {
+            color: #4b5563;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .metric-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            position: relative; 
+            cursor: help; 
+        }
+        
+        .metric-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            display: block;
+        }
+        
+        .metric-label {
+            font-size: 0.8rem;
+            color: #4b5563;
+            margin-top: 5px;
+        }
+
+        .metric-tooltip {
+            visibility: hidden;
+            opacity: 0;
+            width: max-content;
+            background-color: #2D3748;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 10;
+            bottom: 105%; 
+            left: 50%;
+            transform: translateX(-50%);
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .metric-tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #2D3748 transparent transparent transparent;
+        }
+
+        .metric-box:hover .metric-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+                
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        li {
+            color: #4b5563;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 5px;
+        }
+        
+        .prioritization {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border-left: none;
+        }
+        
+        .prioritization h2 {
+            color: white;
+        }
+        
+        /* --- VISUAL TRIAD: SUCCESS METRICS ACCENT --- */
+        .section.success-metrics {
+            border-left: 4px solid #667eea;
+        }
+        .section.success-metrics h2 {
+            color: #667eea;
+        }
+        /* --- END VISUAL TRIAD --- */
+
+        .timeline-container, .risk-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .phase-header, .risk-header {
+            background-color: #f1f5f9;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s ease;
+        }
+        
+        .phase-header:hover, .risk-header:hover {
+            background-color: #e2e8f0;
+        }
+
+        .phase-header.active, .risk-header.active {
+             border-bottom-left-radius: 0;
+             border-bottom-right-radius: 0;
+        }
+        
+        .phase-header h4, .risk-header h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .phase-header h4 { color: #2D3748; }
+        .risk-header h4 { color: #dc2626; } 
+        .risk-header { border-left: 4px solid #ef4444; } 
+        
+        .chevron {
+            transition: transform 0.3s ease;
+        }
+        .phase-header .chevron { color: #667eea; }
+        .risk-header .chevron { color: #ef4444; }
+        
+        .phase-header.active .chevron, .risk-header.active .chevron {
+            transform: rotate(90deg);
+        }
+
+        .phase-details, .risk-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+            background-color: #f8fafc;
+            border-radius: 0 0 8px 8px;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+            padding: 0 20px;
+        }
+
+        .phase-details.show, .risk-details.show {
+            max-height: 500px; 
+            padding: 20px;
+        }
+        
+        .phase-details ul, .risk-details ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 0;
+        }
+        
+        .phase-details li, .risk-details li {
+            padding-left: 1.2em;
+            position: relative;
+            font-size: 0.85rem;
+        }
+
+        .phase-details li::before {
+            content: '✓';
+            color: #10b981;
+            position: absolute;
+            left: 0;
+        }
+
+        .risk-details li::before {
+            content: '»';
+            color: #ef4444;
+            position: absolute;
+            left: 0;
+        }
+        
+        .phase-details h5, .risk-details h5 {
+            font-weight: 600;
+            color: #4A5568;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        .phase-details h5:first-child, .risk-details h5:first-child {
+            margin-top: 0;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .core-assumptions ul {
+                columns: 1;
+                -webkit-columns: 1;
+                -moz-columns: 1;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Real-Time Ad Campaign Insights</h1>
+            <p>Dynamic Dashboard MVP for Small Business Advertisers</p>
+        </div>
+        
+        <div class="content">
+            <div class="section executive-summary">
+                <h2><span class="icon">💡</span> Executive Summary</h2>
+                <p>Small business advertisers on Fancy's platform struggle with static dashboards that overwhelm them with data but provide no actionable guidance, leading to suboptimal campaign performance. This MVP introduces a dynamic insights dashboard that surfaces the top 3 priority metrics, provides contextual recommendations, and enables one-click navigation to make changes. Expected outcomes: <strong>30%+ weekly engagement growth</strong>, <strong>50%+ recommendation adoption</strong>, and <strong>20% ROAS improvement</strong> within 3 months.</p>
+            </div>
+            
+            <div class="section core-assumptions">
+                <h2><span class="icon">🎯</span> Core Assumptions</h2>
+                <ul>
+                    <li><strong>Target:</strong> SMBs running 90+ day campaigns</li>
+                    <li><strong>Behavior:</strong> Weekly dashboard check-ins, need 24hr data freshness</li>
+                    <li><strong>Fancy's Goal:</strong> Increase engagement through actionable insights vs. static metrics</li>
+                    <li><strong>Advertiser Success Metric:</strong> Return on ad spend (ROAS) improvement</li>
+                </ul>
+            </div>
+            
+            <div class="section product-vision">
+                <h2><span class="icon">🎨</span> Product Vision</h2>
+                <p>Transform static reporting into a dynamic, actionable summary of what's wrong, why it matters, and how to optimize it. Built on Fancy's real-time data pipeline.</p>
+            </div>
+
+            <div class="left-column">
+                <div class="section">
+                    <h2><span class="icon">🔧</span> Core MVP Capabilities</h2>
+                    <div class="capabilities">
+                        <div class="capability">
+                            <div class="capability-icon">1</div>
+                            <div class="capability-content">
+                                <h4>Dynamic Priority Panel</h4>
+                                <p>Surfaces top 3 metrics needing attention with color-coded urgency.</p>
+                            </div>
+                        </div>
+                        <div class="capability">
+                            <div class="capability-icon">2</div>
+                            <div class="capability-content">
+                                <h4>Contextual Recommendations</h4>
+                                <p>Provides specific optimization advice based on performance patterns and industry benchmarks</p>
+                            </div>
+                        </div>
+                        <div class="capability">
+                            <div class="capability-icon">3</div>
+                            <div class="capability-content">
+                                <h4>One-Click Actions</h4>
+                                <p>Direct navigation to campaign settings with a confirmation flow to implement changes quickly</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section prioritization">
+                    <h2><span class="icon">⚡</span> Prioritization Rationale</h2>
+                    <p><strong>Selection Criteria:</strong> (1) <em>Immediate Impact</em> - addresses #1 pain point of information overload, (2) <em>Adoption Ease</em> - builds on familiar patterns, (3) <em>Technical Feasibility</em> - leverages existing data, (4) <em>Scalability</em> - foundation for advanced features.</p>
+                </div>
+
+                <div class="section">
+                    <h2><span class="icon">🚀</span> 3-Month Launch Timeline</h2>
+                    <div class="timeline-container">
+                        <div class="timeline-item">
+                            <div class="phase-header">
+                                <h4>Month 1: Foundation</h4>
+                                <span class="chevron">▶</span>
+                            </div>
+                            <div class="phase-details">
+                                <h5>Focus: Web Dashboard Core</h5>
+                                <ul>
+                                    <li>Finalize KPI definitions & industry benchmark data</li>
+                                    <li>Implement real-time data pipeline & metrics engine</li>
+                                    <li>Launch responsive web dashboard beta</li>
+                                    <li>Internal testing with 5-10 pilot advertisers</li>
+                                </ul>
+                                <h5>Stakeholders</h5>
+                                <ul>
+                                    <li>Engineering, UX, Data, Customer Success,  Pilot Partners</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="phase-header">
+                                <h4>Month 2: Intelligence</h4>
+                                <span class="chevron">▶</span>
+                            </div>
+                            <div class="phase-details">
+                                <h5>Focus: Recommendations Engine</h5>
+                                <ul>
+                                    <li>Develop and test rule-based recommendation engine</li>
+                                    <li>QA recommendation framework accuracy</li>
+                                    <li>Implement deeplinks</li>                                   
+								    <li>Begin mobile app foundation</li>
+                                    <li>Test cross-platform consistency with 20+ advertisers</li>
+                                </ul>
+                                <h5>Stakeholders</h5>
+                                <ul>
+                                    <li>Data, Engineering, Mobile Dev, Sales</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="phase-header">
+                                <h4>Month 3: Full Launch</h4>
+                                <span class="chevron">▶</span>
+                            </div>
+                            <div class="phase-details">
+                                <h5>Focus: Attribution & Scale</h5>
+                                <ul>
+                                    <li>Complete mobile app features</li>
+                                    <li>Conduct performance optimization & scale testing</li>
+                                    <li>Launch full platform with onboarding materials</li>
+                                </ul>
+                                <h5>Stakeholders</h5>
+                                <ul>
+                                    <li>Product, Marketing, Sales, Customer Success, All Target Ad Partners</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-column">
+                <div class="dashboard-mockup">
+                    <div class="mockup-header">
+                        <h3>🎯 Priority Insights Dashboard</h3>
+                    </div>
+                    
+                    <div class="metric-card red">
+                        <div class="metric-title">Conversion Rate</div>
+                        <div class="metric-value">1.2%</div>
+                        <div class="recommendation">Below target range (2.5-4%). Low conversion often indicates offer-audience mismatch.</div>
+                        <div class="action-link">→ Adjust targeting settings</div>
+                    </div>
+                    
+                    <div class="metric-card yellow">
+                        <div class="metric-title">Cost Per Click</div>
+                        <div class="metric-value">$2.85</div>
+                        <div class="recommendation">Approaching upper limit ($3.00). Consider refining keywords or audience.</div>
+                        <div class="action-link">→ Review keyword bids</div>
+                    </div>
+                    
+                    <div class="metric-card green">
+                        <div class="metric-title">Click-Through Rate</div>
+                        <div class="metric-value">3.8%</div>
+                        <div class="recommendation">Performing well within target range (3.2-5.1%). Continue current approach.</div>
+                        <div class="action-link">→ View detailed performance</div>
+                    </div>
+                </div>
+
+                <div class="section success-metrics">
+                    <h2><span class="icon">📊</span> Success Metrics</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <span class="metric-number">30%+</span>
+                            <div class="metric-label">Weekly Engagement Rate Growth</div>
+                            <div class="metric-tooltip">(Active Users / Total Users) * 100</div>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-number">50%+</span>
+                            <div class="metric-label">Recommendation Adoption</div>
+                            <div class="metric-tooltip">(Recommendations Acted On / Total) * 100</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2><span class="icon">⚠️</span> Risk Mitigation</h2>
+                    <div class="risk-container">
+                        <div class="risk-item">
+                             <div class="risk-header">
+                                <h4>Data Synchronization Risk</h4>
+                                <span class="chevron">▶</span>
+                            </div>
+                            <div class="risk-details">
+                                <h5>Challenge</h5>
+                                <p style="font-size: 0.85rem; line-height: 1.4;">Discrepancies between web/mobile data refresh rates and UX could lead to advertiser confusion and lost trust.</p>
+                                <h5 style="margin-top: 10px;">Mitigation Strategy</h5>
+                                <ul>
+                                    <li>Use shared UI library & consistent visual language</li>
+                                    <li>Implement a unified API data layer for both platforms</li>
+                                    <li>Create automated cross-platform data validation tests</li>
+                                    <li>Set up monitoring for data discrepancy alerts</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="risk-item">
+                             <div class="risk-header">
+                                <h4>Stakeholder Alignment Risk</h4>
+                                <span class="chevron">▶</span>
+                            </div>
+                            <div class="risk-details">
+                               <h5>Challenge</h5>
+                               <p style="font-size: 0.85rem; line-height: 1.4;">Conflicting team priorities for feature development could cause delays and scope creep.</p>
+                               <h5 style="margin-top: 10px;">Mitigation Strategy</h5>
+                               <ul>
+                                   <li>Establish clear, PM-led decision-making hierarchy</li>
+                                   <li>Hold weekly cross-functional standups</li>
+                                   <li>Create shared OKRs tied to advertiser satisfaction</li>
+                                   <li>Use a transparent feature scoring matrix (Effort vs. Value)</li>
+                               </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const accordionHeaders = document.querySelectorAll('.phase-header, .risk-header');
+
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', function () {
+                    this.classList.toggle('active');
+                    const content = this.nextElementSibling;
+                    content.classList.toggle('show');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
